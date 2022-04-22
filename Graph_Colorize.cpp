@@ -15,6 +15,16 @@ public:
     };
 };
 
+
+class Graph_object
+{
+private:
+    vector <vector <int>> Graph;
+    vector <unsigned int> color;
+public:
+
+};
+
 vector <string> list_files(string dir)
 {
     vector <string> result;
@@ -49,7 +59,7 @@ int main()
             getline(file, buf);
             edge start_data = split(buf);
             int N = start_data.x;
-            vector <vector <int>> Graph (N, vector <int> (0))
+            vector <vector <int>> Graph(N, vector <int>(0));
             while (getline(file, buf))
             {
                 if (buf == "") continue;
@@ -58,9 +68,10 @@ int main()
                 Graph[start_data.y].push_back(start_data.x);
             }
             file.close();
-            
-        }
-    }
+            sort(Graph.begin(), Graph.end(), [](vector <int>& a, vector <int>& b)
+                {return a.size() < b.size()});
+
+            }
     catch (exception& e)
     {
         cout << e.what();
