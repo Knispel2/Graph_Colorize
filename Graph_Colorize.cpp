@@ -135,7 +135,7 @@ int main()
                 file.close();
                 Graph_object test_data(Graph);
                 while (!test_data.try_colorize()) {}
-                cout << x << " test finished " << endl;
+                cout << x << " test finished " << endl << flush;
                 fout << x << ":" << test_data.return_chr() << endl;
             }
         }
