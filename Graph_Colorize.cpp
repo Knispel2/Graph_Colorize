@@ -10,9 +10,7 @@ class edge
 public:
     int x, y;
     edge(int a, int b) : x(a), y(b)
-    {
-
-    };
+    {};
 };
 
 class Graph_object
@@ -36,6 +34,7 @@ public:
         for (auto x : node.edges)
             if (color[x] == 0)
                 counter++;
+        return counter;
     }
 
     void Graph_transform()
@@ -52,19 +51,22 @@ public:
         return true;
     }
 
+    bool check_status()
+    {
+        for (auto x : color)
+            if (x == 0) return false;
+        return true;
+    }
+    
     bool try_colorize()
     {
-        bool flag = false;
         for (auto x : Graph)
             if (color[x.num] == 0)
                 if (color_node_check(color_counter, x))
-                {
-                    flag = true;
-                    color[x.num] = color_counter;
-                }                    
+                    color[x.num] = color_counter;               
         color_counter++;
         Graph_transform();
-        return flag;
+        return check_status();
     }
 
     int return_chr()
