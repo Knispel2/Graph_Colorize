@@ -97,7 +97,7 @@ edge split(string& data, string file_debug = "")
     int transp;
     if (data.find("  ") != string::npos) transp = 2;
     else transp = 1;
-    return edge(stod(data.substr(0, pos)) - 1, stod(data.substr(pos + transp)) - 1);
+    return edge(stod(data.substr(0, pos)), stod(data.substr(pos + transp)));
 }
 
 
@@ -109,9 +109,8 @@ int main()
     fout.open("result.txt");
     string x;
     try {
-            for (int k = 0; k < data.size(); k++)
+            for (auto x : data)
             {
-                x = data[k];
                 cout << "Starting " << x << endl << flush;
                 ifstream file("data/" + x);
                 getline(file, buf);
@@ -119,7 +118,7 @@ int main()
                 int N = start_data.x;
                 vector <element> Graph(N);
                 for (int i = 0; i < N; i++)
-                    Graph[i] = element(i);
+                    Graph.push_back(element(i));
                 while (getline(file, buf))
                 {
                     if (buf == "") continue;
@@ -130,6 +129,8 @@ int main()
                 file.close();
                 Graph_object test_data(Graph);
                 while (!test_data.try_colorize()) {}
+                cout << x << " test finished " << endl;
+                fout << x << ":" << test_data.return_chr() << endl;
             }
         }
     catch (exception& e)
