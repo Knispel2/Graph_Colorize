@@ -15,7 +15,6 @@ public:
     };
 };
 
-
 class Graph_object
 {
 private:
@@ -23,9 +22,12 @@ private:
     vector <unsigned int> color;
     int color_counter = 1;
 public:
+
     Graph_object(vector <element> data) : Graph(data)
     {
         color.resize(data.size(), 0);
+        Graph_transform();
+        color[Graph[0].num] = color_counter;
     }
 
     int get_degree(element & node)
@@ -42,6 +44,33 @@ public:
             {return get_degree(a) > get_degree(b); });
     }
 
+    bool color_node_check(int colr_check, element obj)
+    {
+        for (auto x : obj.edges)
+            if (color[x] == colr_check)
+                return false;
+        return true;
+    }
+
+    bool try_colorize()
+    {
+        bool flag = false;
+        for (auto x : Graph)
+            if (color[x.num] == 0)
+                if (color_node_check(color_counter, x))
+                {
+                    flag = true;
+                    color[x.num] = color_counter;
+                }                    
+        color_counter++;
+        Graph_transform();
+        return flag;
+    }
+
+    int return_chr()
+    {
+        return color_counter;
+    }
 };
 
 class element
@@ -68,7 +97,7 @@ edge split(string& data, string file_debug = "")
     int transp;
     if (data.find("  ") != string::npos) transp = 2;
     else transp = 1;
-    return edge(stod(data.substr(0, pos)), stod(data.substr(pos + transp)));
+    return edge(stod(data.substr(0, pos)) - 1, stod(data.substr(pos + transp)) - 1);
 }
 
 
@@ -80,28 +109,29 @@ int main()
     fout.open("result.txt");
     string x;
     try {
-        for (int k = 0; k < data.size(); k++)
-        {
-            x = data[k];
-            cout << "Starting " << x << endl << flush;
-            ifstream file("data/" + x);
-            getline(file, buf);
-            edge start_data = split(buf);
-            int N = start_data.x;
-            vector <element> Graph(N);
-            for (int i = 0; i < N; i++)
-                Graph[i] = element(i);
-            while (getline(file, buf))
+            for (int k = 0; k < data.size(); k++)
             {
-                if (buf == "") continue;
-                start_data = split(buf);
-                Graph[start_data.x].edges.push_back(start_data.y);
-                Graph[start_data.y].edges.push_back(start_data.x);
+                x = data[k];
+                cout << "Starting " << x << endl << flush;
+                ifstream file("data/" + x);
+                getline(file, buf);
+                edge start_data = split(buf);
+                int N = start_data.x;
+                vector <element> Graph(N);
+                for (int i = 0; i < N; i++)
+                    Graph[i] = element(i);
+                while (getline(file, buf))
+                {
+                    if (buf == "") continue;
+                    start_data = split(buf);
+                    Graph[start_data.x].edges.push_back(start_data.y);
+                    Graph[start_data.y].edges.push_back(start_data.x);
+                }
+                file.close();
+                Graph_object test_data(Graph);
+                while (!test_data.try_colorize()) {}
             }
-            file.close();
-            
-
-            }
+        }
     catch (exception& e)
     {
         cout << e.what();
