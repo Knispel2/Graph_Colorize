@@ -19,9 +19,38 @@ public:
 class Graph_object
 {
 private:
-    vector <vector <int>> Graph;
+    vector <element> Graph;
     vector <unsigned int> color;
+    int color_counter = 1;
 public:
+    Graph_object(vector <element> data) : Graph(data)
+    {
+        color.resize(data.size(), 0);
+    }
+
+    int get_degree(element & node)
+    {
+        int counter = 0;
+        for (auto x : node.edges)
+            if (color[x] == 0)
+                counter++;
+    }
+
+    void Graph_transform()
+    {
+        sort(Graph.begin(), Graph.end(), [=](element a, element b)
+            {return get_degree(a) > get_degree(b); });
+    }
+
+};
+
+class element
+{
+public:
+    vector <int> edges;
+    int num = 0;
+    element(int data) : num(data)
+    {};
 
 };
 
@@ -59,17 +88,18 @@ int main()
             getline(file, buf);
             edge start_data = split(buf);
             int N = start_data.x;
-            vector <vector <int>> Graph(N, vector <int>(0));
+            vector <element> Graph(N);
+            for (int i = 0; i < N; i++)
+                Graph[i] = element(i);
             while (getline(file, buf))
             {
                 if (buf == "") continue;
                 start_data = split(buf);
-                Graph[start_data.x].push_back(start_data.y);
-                Graph[start_data.y].push_back(start_data.x);
+                Graph[start_data.x].edges.push_back(start_data.y);
+                Graph[start_data.y].edges.push_back(start_data.x);
             }
             file.close();
-            sort(Graph.begin(), Graph.end(), [](vector <int>& a, vector <int>& b)
-                {return a.size() < b.size()});
+            
 
             }
     catch (exception& e)
