@@ -13,6 +13,18 @@ public:
     {};
 };
 
+class element
+{
+public:
+    vector <int> edges;
+    int num = 0;
+    element(int data) : num(data)
+    {};
+    element()
+    {}
+
+};
+
 class Graph_object
 {
 private:
@@ -75,15 +87,7 @@ public:
     }
 };
 
-class element
-{
-public:
-    vector <int> edges;
-    int num = 0;
-    element(int data) : num(data)
-    {};
 
-};
 
 vector <string> list_files(string dir)
 {
@@ -120,7 +124,7 @@ int main()
                 int N = start_data.x;
                 vector <element> Graph(N);
                 for (int i = 0; i < N; i++)
-                    Graph.push_back(element(i));
+                    Graph[i] = element(i);
                 while (getline(file, buf))
                 {
                     if (buf == "") continue;
