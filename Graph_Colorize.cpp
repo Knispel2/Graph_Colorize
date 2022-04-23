@@ -137,7 +137,6 @@ int main()
                 while (!test_data.try_colorize()) {}
                 cout << x << " test finished " << endl << flush;
                 fout << x << ":" << test_data.return_chr() << endl;
-                test_data.~Graph_object();
             }
         }
     catch (exception& e)
