@@ -9,8 +9,8 @@ class edge
 {
 public:
     int x, y;
-    edge(int a, int b) : x(a), y(b)
-    {};
+    edge() {}
+    edge(int a, int b) : x(a), y(b) {};
 };
 
 class element
@@ -22,7 +22,6 @@ public:
     {};
     element()
     {}
-
 };
 
 class Graph_object
@@ -86,8 +85,6 @@ public:
         return color_counter;
     }
 };
-
-
 
 vector <string> list_files(string dir)
 {
