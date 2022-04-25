@@ -13,6 +13,9 @@ public:
     edge(int a, int b) : x(a), y(b) {};
 };
 
+vector <string> list_files(string dir);
+edge split(string& data, string file_debug = "");
+
 class element
 {
 public:
@@ -86,22 +89,6 @@ public:
     }
 };
 
-vector <string> list_files(string dir)
-{
-    vector <string> result;
-    for (const auto& entry : filesystem::directory_iterator(dir))
-        result.push_back(entry.path().string().substr(5));
-    return result;
-}
-
-edge split(string& data, string file_debug = "")
-{
-    auto pos = data.find(" ");
-    int transp;
-    if (data.find("  ") != string::npos) transp = 2;
-    else transp = 1;
-    return edge(stod(data.substr(0, pos)), stod(data.substr(pos + transp)));
-}
 
 
 int main()
@@ -133,7 +120,7 @@ int main()
                 Graph_object test_data(Graph);
                 while (!test_data.try_colorize()) {}
                 cout << x << " test finished " << endl << flush;
-                fout << x << ":" << test_data.return_chr() << endl;
+                fout << x << ":" << test_data.return_chr() - 1 << endl;
             }
         }
     catch (exception& e)
@@ -144,3 +131,53 @@ int main()
     fout.close();
 }
 
+vector <string> list_files(string dir)
+{
+    vector <string> result;
+    for (const auto& entry : filesystem::directory_iterator(dir))
+        result.push_back(entry.path().string().substr(5));
+    return result;
+}
+
+edge split(string& data, string file_debug)
+{
+    auto pos = data.find(" ");
+    int transp;
+    if (data.find("  ") != string::npos) transp = 2;
+    else transp = 1;
+    return edge(stod(data.substr(0, pos)), stod(data.substr(pos + transp)));
+}
+
+
+
+bool check_perm(const vector <unsigned int>& base)
+{
+    for (int i = 0; i < base.size(); i++)
+        if (base[base[i] - 1] == i + 1) return false;
+    return true;
+}
+
+double cost_perm(vector <unsigned int>& permutations, vector <edge>& cords)
+{
+    double result = 0;
+    for (int i = 0; i < permutations.size(); i++)
+        result += 3;
+    return result;
+}
+
+double brutforce_method(vector <edge> cords, double result)
+{
+    vector <unsigned int> permutations(cords.size());
+    for (int i = 0; i < cords.size(); i++)
+        permutations[i] = i + 1;
+    double buf;
+    do {
+        if (check_perm(permutations))
+        {
+            buf = cost_perm(permutations, cords);
+            if (buf > result)
+                result = buf;
+        }
+    } while (next_permutation(permutations.begin(), permutations.end()));
+    return buf;
+}
